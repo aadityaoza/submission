@@ -85,7 +85,7 @@ class CandidateGenerator:
         # Substitution - replace each character at every index and lookup
         # resulting word in dictionary
         i = 0
-        while i < len(term):
+        while i < len(term): 
             t = ''
             for a in self.alphabet:
                 if i == 0:
@@ -176,16 +176,16 @@ class CandidateGenerator:
                 candidate_query = query.split()
             
             # Only generate candidates if currently generated ones are insufficient
-            #if len(valid) < 10:
-            #    candidate_query = query.split()
-            #    for edited, edit_p in invalid:
-            #        valid_2 , invalid_2 = self.genCandidates(edited)
-            #    
-            #        for edited_2, edit_p_2 in valid_2:
-            #            candidate_query[i] = edited_2
-            #            candidate = " ".join(candidate_query)
-            #            candidates.append((candidate,2*edit_p_2))
-            #            candidate_query = query.split()
+            if len(valid) < 10:
+                candidate_query = query.split()
+                for edited, edit_p in invalid:
+                    valid_2 , invalid_2 = self.genCandidates(edited)
+                
+                    for edited_2, edit_p_2 in valid_2:
+                        candidate_query[i] = edited_2
+                        candidate = " ".join(candidate_query)
+                        candidates.append((candidate,2*edit_p_2))
+                        candidate_query = query.split()
                     
             i+=1
         
@@ -246,9 +246,8 @@ class CandidateGenerator:
         
         # Yield original query
         if len(final_candidates) == 0:
-            #yield (query, self.epm.get_edit_logp(query, query))
             final_candidates.append((query, self.epm.get_edit_logp(query, query)))
-            
+        
         return final_candidates
          
         ### End your code

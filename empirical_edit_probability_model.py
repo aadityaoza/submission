@@ -100,5 +100,8 @@ class EmpiricalEditProbabilityModel(BaseEditProbabilityModel):
                 under this `EditProbabilityModel`.
         """
         ### Begin your code
-
+        if edited == original:
+            return math.log(1.0 - 0.05)
+        
+        return math.log(0.05)
         ### End your code
