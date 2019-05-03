@@ -245,7 +245,7 @@ class CandidateGenerator:
             #yield from self.filter_and_yield(cd,lp_cd)
         
         # Yield original query
-        if len(final_candidates) == 0:
+        if self.get_num_oov(query) == 0:
             final_candidates.append((query, self.epm.get_edit_logp(query, query)))
         
         return final_candidates

@@ -14,8 +14,6 @@ class LanguageModel(LanguageModel):
         ### Begin your code
         total_count = self.total_num_tokens
         prob = self.unigram_counts[unigram]/total_count
-        if prob == 0:
-            prob = 1.0/ total_count
         return math.log(prob)
         ### End your code
 
@@ -36,14 +34,7 @@ class LanguageModel(LanguageModel):
         ### Begin your code
         total_count = self.total_num_tokens
         prob_1 = self.unigram_counts[w_1]/total_count
-        
-        if prob_1 == 0:
-            prob_1 = 1.0/total_count
-            prob_2 = self.bigram_counts[(w_1,w_2)]/1.0
-        
-        else:
-            prob_2 = self.bigram_counts[(w_1,w_2)]/self.unigram_counts[w_1]
-        
+        prob_2 = self.bigram_counts[(w_1,w_2)]/self.unigram_counts[w_1]
         prob = (self.lambda_ * prob_1) + ((1 - self.lambda_) * prob_2)
             
         return math.log(prob)

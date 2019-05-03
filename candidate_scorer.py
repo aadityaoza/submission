@@ -59,9 +59,10 @@ class CandidateScorer:
             total_candidates +=1
         
         if len(canditates_scores) == 0:
-            print('No candidates ! for ' , r)
+            # Kick out from here !!
             return r
         
+        # Else sort remaining results
         canditates_scores = sorted(canditates_scores,key = lambda x: x[1], reverse = True)
         result = canditates_scores[0][0]
         result = " ".join(result.split())
