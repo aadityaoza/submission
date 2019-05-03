@@ -175,7 +175,7 @@ class CandidateGenerator:
                 candidates.append((candidate,edit_p))
                 candidate_query = query.split()
             
-            # Only generate candidates if currently generated ones are insufficient
+            #Only generate candidates if currently generated ones are insufficient
             if len(valid) < 10:
                 candidate_query = query.split()
                 for edited, edit_p in invalid:
@@ -223,19 +223,19 @@ class CandidateGenerator:
                 if self.get_num_oov(candidate) == 0:
                     candidates.append((candidate,self.epm.get_edit_logp(newTerm,terms[i])))
                 
-                #j = 0
-                #while j < len(candidate.split()):
-                #    candidate_query = candidate.split()
-                #    valid, invalid = self.genCandidates(candidate_query[j])
-                #    for edited, edit_p in valid:
-                #        candidate_query[j] = edited
-                #        candidate_with_space = " ".join(candidate_query)
-                #       
-                #        if self.get_num_oov(candidate_with_space) == 0:
-                #            candidates.append((candidate_with_space,2*edit_p))
-                #           
-                #        candidate_query = candidate.split()
-                #   j+=1
+                j = 0
+                while j < len(candidate.split()):
+                    candidate_query = candidate.split()
+                    valid, invalid = self.genCandidates(candidate_query[j])
+                    for edited, edit_p in valid:
+                        candidate_query[j] = edited
+                        candidate_with_space = " ".join(candidate_query)
+                       
+                        if self.get_num_oov(candidate_with_space) == 0:
+                            candidates.append((candidate_with_space,2*edit_p))
+                           
+                        candidate_query = candidate.split()
+                    j+=1
                 i += 1    
         
         final_candidates = []
