@@ -176,7 +176,7 @@ class CandidateGenerator:
                 candidate_query = query.split()
             
             #Only generate candidates if currently generated ones are insufficient
-            if len(valid) < 10:
+            if len(valid) < 5:
                 candidate_query = query.split()
                 for edited, edit_p in invalid:
                     valid_2 , invalid_2 = self.genCandidates(edited)
@@ -184,7 +184,7 @@ class CandidateGenerator:
                     for edited_2, edit_p_2 in valid_2:
                         candidate_query[i] = edited_2
                         candidate = " ".join(candidate_query)
-                        candidates.append((candidate,2*edit_p_2))
+                        candidates.append((candidate,edit_p + edit_p_2 ))
                         candidate_query = query.split()
                     
             i+=1
