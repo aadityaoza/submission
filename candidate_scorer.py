@@ -54,6 +54,10 @@ class CandidateScorer:
         canditates_scores = []
         total_candidates = 0
         for candidate, candidate_logp in self.cg.get_candidates(r):
+            if candidate == ' ' or candidate == '  ' or candidate == '   ':
+                print(candidate, ' ',candidate_logp)
+                continue
+                
             score = self.get_score(candidate,candidate_logp)
             canditates_scores.append((candidate,score))
             total_candidates +=1

@@ -173,43 +173,28 @@ class CandidateGenerator:
                 candidate_query[i] = edited
                 candidate = " ".join(candidate_query)
                 candidates.append((candidate,edit_p))
-                candidate_query = query.split()
-            
-            #Only generate candidates if currently generated ones are insufficient
-            if len(valid) < 5:
-                candidate_query = query.split()
-                for edited, edit_p in invalid:
-                    valid_2 , invalid_2 = self.genCandidates(edited)
                 
-                    for edited_2, edit_p_2 in valid_2:
-                        candidate_query[i] = edited_2
-                        candidate = " ".join(candidate_query)
-                        candidates.append((candidate,edit_p + edit_p_2 ))
-                        candidate_query = query.split()
-                    
+                
+                ## Code to generate second edit after edit to first word
+                ## It generates edit to a different word in candidate query
+                ## Currently commented out
+                
+                #j = 0
+                #while j < len(candidate_query):
+                #    if i != j:
+                #        cand_query_2 = candidate_query[:]
+                #        valid_2, invalid_2 = self.genCandidates(candidate_query[j])
+                #    
+                #        for edited_2, edit_p_2 in valid_2:
+                #            cand_query_2[j] = edited_2
+                #            cand_2 = " ".join(cand_query_2)
+                #            candidates.append((cand_2,edit_p_2 + edit_p))
+                #            cand_query_2 = candidate_query[:]
+                #    j += 1
+                
+                # Re-compute original query
+                candidate_query = query.split()
             i+=1
-        
-        ################################################
-        ################################################
-        ################################################
-        #for term in terms:
-        #    valid,invalid = self.genCandidates(term)
-            
-            # comment this out - valid_probs = self.compareUnigramsLM_ECM(valid)
-            
-            # Prune candidate list space according to probability
-            #valid = sorted(valid,key = lambda x: x[1],reverse = True)
-        
-            #if len(terms) > 6:
-            #    valid = valid[:3]    
-            #else:
-            #    if len(valid)>10:
-            #        valid = valid[:10]
-                
-            #candidates = self.cartesian(candidates,valid)
-            ################################################
-            ################################################
-            ################################################
         
         #Remove white spaces at different places in string
         if len(terms) > 1:
@@ -223,19 +208,22 @@ class CandidateGenerator:
                 if self.get_num_oov(candidate) == 0:
                     candidates.append((candidate,self.epm.get_edit_logp(newTerm,terms[i])))
                 
-                j = 0
-                while j < len(candidate.split()):
-                    candidate_query = candidate.split()
-                    valid, invalid = self.genCandidates(candidate_query[j])
-                    for edited, edit_p in valid:
-                        candidate_query[j] = edited
-                        candidate_with_space = " ".join(candidate_query)
-                       
-                        if self.get_num_oov(candidate_with_space) == 0:
-                            candidates.append((candidate_with_space,2*edit_p))
-                           
-                        candidate_query = candidate.split()
-                    j+=1
+                ## Code to generate second edit after space
+                ## Currently commented out
+                
+                #j = 0
+                #while j < len(candidate.split()):
+                #    candidate_query = candidate.split()
+                #    valid, invalid = self.genCandidates(candidate_query[j])
+                #    for edited, edit_p in valid:
+                #        candidate_query[j] = edited
+                #        candidate_with_space = " ".join(candidate_query)
+                #       
+                #        if self.get_num_oov(candidate_with_space) == 0:
+                #            candidates.append((candidate_with_space,2*edit_p))
+                #           
+                #        candidate_query = candidate.split()
+                #    j+=1
                 i += 1    
         
         final_candidates = []
