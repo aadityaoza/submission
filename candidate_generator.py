@@ -129,8 +129,23 @@ class CandidateGenerator:
             updated_candidates.append((candidate,up+ep))
             
         return updated_candidates
-            
+
+    def known(self,words): 
+        "The subset of `words` that appear in the dictionary of WORDS."
+        return set(w for w in words if self.get_num_oov(w) == 0)
+    
+    def edits1(self,word):
+        "All edits that are one edit away from `word`."
+        letters    = self.alphabet
+        splits     = [(word[:i], word[i:])    for i in range(len(word) + 1)]
+        deletes    = [L + R[1:]               for L, R in splits if R]
+        transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R)>1]
+        replaces   = [L + c + R[1:]           for L, R in splits if R for c in letters]
+        inserts    = [L + c + R               for L, R in splits for c in letters]
         
+        result = set(deletes + transposes + replaces + inserts)
+        result = self.known(result)
+        return result
     
     ###########################
     ###########################
@@ -167,30 +182,32 @@ class CandidateGenerator:
         i = 0
         while i < len(terms):
             candidate_query = query.split()
-            valid, invalid = self.genCandidates(terms[i])
+            valid = self.edits1(terms[i])
             
-            for edited, edit_p in valid:
+            for edited in valid:
                 candidate_query[i] = edited
                 candidate = " ".join(candidate_query)
-                candidates.append((candidate,edit_p))
+                edit_1 = self.epm.get_edit_logp(edited,terms[i])
+                candidates.append((candidate,edit_1))
                 
                 
                 ## Code to generate second edit after edit to first word
                 ## It generates edit to a different word in candidate query
                 ## Currently commented out
                 
-                #j = 0
-                #while j < len(candidate_query):
-                #    if i != j:
-                #        cand_query_2 = candidate_query[:]
-                #        valid_2, invalid_2 = self.genCandidates(candidate_query[j])
-                #    
-                #        for edited_2, edit_p_2 in valid_2:
-                #            cand_query_2[j] = edited_2
-                #            cand_2 = " ".join(cand_query_2)
-                #            candidates.append((cand_2,edit_p_2 + edit_p))
-                #            cand_query_2 = candidate_query[:]
-                #    j += 1
+                j = 0
+                while j < len(candidate_query):
+                    if i != j:
+                        cand_query_2 = candidate_query[:]
+                        valid_2 = self.edits1(candidate_query[j])
+                    
+                        for edited_2 in valid_2:
+                            cand_query_2[j] = edited_2
+                            cand_2 = " ".join(cand_query_2)
+                            edit_2 = self.epm.get_edit_logp(edited_2,edited)
+                            candidates.append((cand_2,edit_1 + edit_2))
+                            cand_query_2 = candidate_query[:]
+                    j += 1
                 
                 # Re-compute original query
                 candidate_query = query.split()
@@ -226,16 +243,12 @@ class CandidateGenerator:
                 #    j+=1
                 i += 1    
         
-        final_candidates = []
+
         for cd, lp_cd in candidates:
-            if self.get_num_oov(cd) == 0:
-                final_candidates.append((cd, lp_cd))
-            #yield from self.filter_and_yield(cd,lp_cd)
+            yield from self.filter_and_yield(cd,lp_cd)
         
         # Yield original query
-        if self.get_num_oov(query) == 0:
-            final_candidates.append((query, self.epm.get_edit_logp(query, query)))
+        yield from self.filter_and_yield(query, self.epm.get_edit_logp(query, query))
         
-        return final_candidates
          
         ### End your code
