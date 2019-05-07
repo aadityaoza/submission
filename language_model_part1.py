@@ -1,8 +1,9 @@
 
+
 class LanguageModel:
     """Models prior probability of unigrams and bigrams."""
 
-    def __init__(self, corpus_dir='pa2-data/corpus', lambda_=0.1):
+    def __init__(self, corpus_dir='pa2-data/corpus', lambda_=0.05):
         """Iterates over all whitespace-separated tokens in each file in
         `corpus_dir`, and counts the number of occurrences of each unigram and
         bigram. Also keeps track of the total number of tokens in the corpus.
@@ -20,17 +21,16 @@ class LanguageModel:
         self.bigram_counts = Counter()   # Maps tuples (w_1, w_2) -> count((w_1, w_2))
 
         ### Begin your code
-        
-        import glob
-        path = corpus_dir + '/'
-        files = glob.glob(os.path.join(path, '*.*'))
-        for file in files:
-            with open(file) as f:
+        last_token = ""
+        files = glob.glob(os.path.join(corpus_dir, '*.*'))
+        for filename in files:
+            with open(filename) as f:
                 str_ = f.read()
-                tokens = str_.split()
-                self.total_num_tokens += len(tokens)
+                tokens = str_.strip().split()
                 for token in tokens:
-                    self.unigram_counts[token]+=1
-                for first, second in zip(tokens, tokens[1:]):
-                    self.bigram_counts[(first,second)] += 1
+                    self.unigram_counts[token] +=1
+                    self.total_num_tokens += 1
+                    if last_token != "":
+                        self.bigram_counts[tuple((last_token, token))] += 1
+                    last_token = token
         ### End your code

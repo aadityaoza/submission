@@ -1,4 +1,5 @@
 
+
 class CandidateScorer:
     """Combines the `LanguageModel`, `EditProbabilityModel`, and
     `CandidateGenerator` to produce the most likely query Q given a raw query R.
@@ -72,3 +73,5 @@ class CandidateScorer:
         result = " ".join(result.split())
         return result
         ### End your code
+
+   

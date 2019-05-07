@@ -33,7 +33,7 @@ class LanguageModel(LanguageModel):
         """
         ### Begin your code
         total_count = self.total_num_tokens
-        prob_1 = self.unigram_counts[w_1]/total_count
+        prob_1 = self.unigram_counts[w_2]/total_count
         prob_2 = self.bigram_counts[(w_1,w_2)]/self.unigram_counts[w_1]
         prob = (self.lambda_ * prob_1) + ((1 - self.lambda_) * prob_2)
             
