@@ -17,6 +17,12 @@ class CandidateScorer:
         self.lm = lm
         self.cg = cg
         self.mu = mu
+        
+        if type(self.cg.epm) is UniformEditProbabilityModel:
+            self.mu = 0.52
+            print('Uniform - 0.52 !!!')
+        elif type(self.cg.epm) is EmpiricalEditProbabilityModel:
+            self.mu = 0.75
 
     def get_score(self, query, log_edit_prob):
         """Uses the language model and `log_edit_prob` to compute the final

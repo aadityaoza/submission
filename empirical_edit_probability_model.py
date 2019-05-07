@@ -200,7 +200,7 @@ class EmpiricalEditProbabilityModel(BaseEditProbabilityModel):
                 if (c1,c2) in self.bigram_counts:
                     den = self.bigram_counts[(c1,c2)] + (self.alphabet_size * self.alphabet_size)
             
-            edit_prob = math.log(count + 1) - math.log(den + self.alphabet_size )
+            edit_prob = math.log(count + 1) - math.log(den)
         
         return edit_prob
         ### End your code
